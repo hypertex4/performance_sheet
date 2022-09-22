@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteCond %{index.php} !-f
+
+RewriteRule ^edit-timesheet/([0-9-]*)$ edit-timesheet.php?timesheet_id=$1& [NC,L]
+RewriteRule ^view-approval-timesheet/([0-9-]*)$ view-approval-timesheet.php?timesheet_id=$1& [NC,L]
+
+RewriteRule ^([^\.]+)$ $1.php [NC,L]

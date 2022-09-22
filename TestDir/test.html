@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href='DataTables/datatables.min.css' rel='stylesheet' type='text/css'>
+
+    <!-- jQuery Library -->
+    <script src="jquery-3.3.1.min.js"></script>
+
+    <!-- Datatable JS -->
+    <script src="DataTables/datatables.min.js"></script>
+</head>
+<body>
+<div class="form-group row pb-4" style="font-size: 12px">
+    <div class="col-lg-8 col-10">
+        <div class="input-daterange input-group" data-plugin-datepicker>
+            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+            <input type="date" class="form-control" name="from_date" placeholder="From date">
+            <span class="input-group-text border-start-0 border-end-0 rounded-0">to</span>
+            <input type="text" class="form-control" name="to_date" id="to_date" placeholder="To date">
+        </div>
+    </div>
+    <div class="col-lg-4 col-2">
+        <input type="button" value="Apply" class="btn btn-success px-4" id="dateFilterApply">
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped mb-0" style="width:100%;font-size: 11px;" id="AnaTable">
+        <thead class="bg-dark text-white">
+        <tr>
+            <th class="staff_name_label">EMPLOYEE NAME</th>
+            <th class="designation_label">DESIGNATION</th>
+            <th class="proj_code_label">CODE</th>
+            <th class="task_label3">TASK/FUNCTION </th>
+            <th class="unit_label">UNIT</th>
+            <th class="date_label">FROM</th>
+            <th class="date_label">TO</th>
+            <th class="task_label4">RESULT</th>
+            <th class="task_label4">COMMENT</th>
+            <th class="total_time_label">TOTAL HRS</th>
+        </tr>
+        </thead>
+
+    </table>
+</div>
+<script>
+    $(document).ready(function(){
+
+        var dataTable = $('#AnaTable').dataTable({
+            // "scrollX": true,
+            // "lengthMenu": [[50,100,150,200,-1], [50,100,150,200,"All"]],
+            // "bSort":false,
+            'processing': true,
+            'serverSide': true,
+            'serverMethod': 'post',
+            //'searching': false, // Remove default Search Control
+            'ajax': {
+                'url':'analysisInc.php',
+                'data': function(data){
+                    // Read values
+                    var from_date = $('input[name=from_date]').val();
+                    var to_date = $('input[name=to_date]').val();
+
+                    // Append to data
+                    data.from_date = from_date;
+                    data.to_date = to_date;
+                }
+            },
+            'columns': [
+                { data: 'user_name' },
+                { data: 'user_unit' },
+                { data: 'project_id' },
+                { data: 'project_task' },
+                { data: 'department_name' },
+                { data: 'from_date' },
+                { data: 'to_date' },
+                { data: 'result' },
+                { data: 'comment' },
+                { data: 'total' },
+            ],
+
+        });
+
+
+
+        // $('#dateFilterApply').click(function(){
+        //     dataTable.draw();
+        // });
+
+
+        $('#to_date').keyup(function(){
+            dataTable.DataTable().draw();
+        });
+
+    });
+</script>
+</body>
+</html>
